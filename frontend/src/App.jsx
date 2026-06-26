@@ -4,6 +4,7 @@ import FeaturedProducts from "./components/FeaturedProducts";
 import Marquee from "./components/Marquee";
 import Categories from "./components/Categories";
 import Testimonials from "./components/Testimonials";
+import CtaSection from "./components/CtaSection";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Categories />
       <FeaturedProducts />
       <Testimonials />
+      <CtaSection />
     </div>
   );
 }
