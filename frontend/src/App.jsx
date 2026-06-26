@@ -2,6 +2,7 @@ import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
 import FeaturedProducts from "./components/FeaturedProducts";
 import Marquee from "./components/Marquee";
+import Categories from "./components/Categories";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Navbar />
       <Hero />
       <Marquee />
+      <Categories />
       <FeaturedProducts />
     </div>
   );
