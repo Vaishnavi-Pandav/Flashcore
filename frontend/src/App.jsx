@@ -16,6 +16,8 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminRoute from "./components/AdminRoute";
 
 // ── Home Sections ────────────────────────────────────────────────────────────
 const Home = () => (
@@ -42,6 +44,11 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={
+          <AdminRoute>
+            <AdminDashboard />
+          </AdminRoute>
+        } />
       </Routes>
     </div>
   );

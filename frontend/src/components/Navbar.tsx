@@ -94,6 +94,11 @@ export default function Navbar() {
                 <Link to="/dashboard" className="text-gray-300 hover:text-white text-sm truncate max-w-[150px] transition-colors">
                   {user?.email}
                 </Link>
+                {(user?.role === 'admin' || user?.role === 'USER') && (
+                  <Link to="/admin" className="text-purple-400 hover:text-purple-300 text-xs font-bold uppercase tracking-widest transition-colors">
+                    Admin
+                  </Link>
+                )}
                 <button 
                   onClick={() => logout()}
                   className="text-xs font-bold text-gray-400 hover:text-white transition-colors uppercase tracking-widest"
@@ -200,6 +205,11 @@ export default function Navbar() {
                     <Link to="/dashboard" onClick={() => setIsOpen(false)} className="block text-gray-400 hover:text-white text-sm transition-colors">
                       {user?.email} (Dashboard)
                     </Link>
+                    {(user?.role === 'admin' || user?.role === 'USER') && (
+                      <Link to="/admin" onClick={() => setIsOpen(false)} className="block text-purple-400 hover:text-purple-300 text-xl font-bold transition-colors">
+                        Admin Panel
+                      </Link>
+                    )}
                     <button 
                       onClick={() => {
                         logout();
