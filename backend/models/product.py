@@ -30,7 +30,6 @@ class Product(Base, UUIDMixin, TimestampMixin):
     # Relationships
     category: Mapped["Category"] = relationship("Category", back_populates="products")
     order_items: Mapped[list["OrderItem"]] = relationship("OrderItem", back_populates="product")
-    cart_items: Mapped[list["CartItem"]] = relationship("CartItem", back_populates="product")
     reviews: Mapped[list["Review"]] = relationship(
         "Review", back_populates="product", cascade="all, delete-orphan"
     )

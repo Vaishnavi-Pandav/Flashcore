@@ -4,7 +4,6 @@ from .user import User, UserRole
 from .category import Category
 from .product import Product
 from .order import Order, OrderItem, OrderStatus
-from .cart import Cart, CartItem
 from .review import Review
 
 __all__ = [
@@ -18,7 +17,5 @@ __all__ = [
     "Order",
     "OrderItem",
     "OrderStatus",
-    "Cart",
-    "CartItem",
     "Review",
 ]

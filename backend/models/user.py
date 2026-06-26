@@ -17,5 +17,4 @@ class User(Base, UUIDMixin, TimestampMixin):
 
     # Relationships
     orders: Mapped[list["Order"]] = relationship("Order", back_populates="user", cascade="all, delete-orphan")
-    cart: Mapped["Cart"] = relationship("Cart", back_populates="user", cascade="all, delete-orphan", uselist=False)
     reviews: Mapped[list["Review"]] = relationship("Review", back_populates="user", cascade="all, delete-orphan")
