@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 
 const NAV_LINKS = [
-  { name: 'Products', href: '#' },
-  { name: 'Categories', href: '#' },
-  { name: 'About', href: '#' },
+  { name: 'Products', href: '/products' },
+  { name: 'Categories', href: '/#categories' },
+  { name: 'About', href: '/#about' },
 ];
 
 export default function Navbar() {

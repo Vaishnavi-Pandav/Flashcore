@@ -18,7 +18,7 @@ from typing import Optional
 from fastapi import (
     APIRouter, Depends, HTTPException, Query, UploadFile, File, Form, status
 )
-from sqlalchemy import func, and_
+from sqlalchemy import func, and_, asc, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -96,6 +96,7 @@ async def list_products(
     category_id: Optional[uuid.UUID] = Query(None, description="Filter by category UUID"),
     min_price: Optional[Decimal] = Query(None, ge=0, description="Minimum price filter"),
     max_price: Optional[Decimal] = Query(None, ge=0, description="Maximum price filter"),
+    sort_by: Optional[str] = Query("newest", description="Sort order: newest | price_asc | price_desc"),
 ):
     filters = [Product.is_deleted.is_(False)]
 
@@ -115,12 +116,20 @@ async def list_products(
     count_result = await db.execute(select(func.count()).select_from(Product).where(and_(*filters)))
     total = count_result.scalar_one()
 
+    # Sort order
+    if sort_by == "price_asc":
+        order_clause = asc(Product.price)
+    elif sort_by == "price_desc":
+        order_clause = desc(Product.price)
+    else:
+        order_clause = desc(Product.created_at)
+
     # Paginated results
     result = await db.execute(
         select(Product)
         .options(selectinload(Product.category))
         .where(and_(*filters))
-        .order_by(Product.created_at.desc())
+        .order_by(order_clause)
         .offset(skip)
         .limit(limit)
     )

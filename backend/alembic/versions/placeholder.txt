@@ -1,0 +1,2 @@
+"""Add sort_by parameter to GET /products"""
+from typing import Literal, Optional

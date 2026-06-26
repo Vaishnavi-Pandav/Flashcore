@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
 
 // Headline component with word-by-word stagger
@@ -102,14 +103,16 @@ export default function Hero() {
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
-            <motion.button
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1, type: "spring", stiffness: 200, damping: 20 }}
-              className="px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors shadow-[0_0_40px_rgba(255,255,255,0.3)]"
-            >
-              Shop Collection
-            </motion.button>
+            <Link to="/products">
+              <motion.button
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1, type: "spring", stiffness: 200, damping: 20 }}
+                className="px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+              >
+                Shop Collection
+              </motion.button>
+            </Link>
             
             <motion.button
               initial={{ opacity: 0, y: 50 }}
