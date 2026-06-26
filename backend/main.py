@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from database import engine, Base
 from contextlib import asynccontextmanager
+import os
 
 from routes.auth import router as auth_router
 from routes.products import router as products_router
@@ -16,6 +18,9 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(title="E-commerce API", lifespan=lifespan)
+
+# Required for Authlib OAuth
+app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY", "super-secret-key"))
 
 origins = [
     "http://localhost:5173",

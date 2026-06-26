@@ -19,6 +19,8 @@ python-dotenv = "^1.0.1"
 cloudinary = "^1.41.0"
 redis = {extras = ["hiredis"], version = "^5.0.0"}
 stripe = "^11.1.0"
+authlib = "^1.7.2"
+httpx = "^0.28.1"
 
 [build-system]
 requires = ["poetry-core"]

@@ -14,6 +14,7 @@ import CtaSection from "./components/CtaSection";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
+import Auth from "./pages/Auth";
 
 // ── Home Sections ────────────────────────────────────────────────────────────
 const Home = () => (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:slug" element={<ProductDetail />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/auth" element={<Auth />} />
       </Routes>
     </div>
   );

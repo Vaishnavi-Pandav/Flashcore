@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X, User } from 'lucide-react';
+import { useAuthStore } from '../store/authStore';
 import { useCartStore } from '../store/cartStore';
 
 const NAV_LINKS = [
@@ -14,7 +15,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { count, openCart } = useCartStore();
+  const { user, isAuthenticated, logout } = useAuthStore();
   const cartCount = count();
+  const navigate = useNavigate();
 
   // Scroll animations
   const { scrollY } = useScroll();
@@ -81,8 +84,29 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Cart & Mobile Toggle */}
+        {/* Actions (Auth & Cart & Mobile Toggle) */}
         <div className="flex items-center space-x-6">
+          
+          {/* User Profile / Login */}
+          <div className="hidden md:flex items-center">
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <span className="text-gray-300 text-sm truncate max-w-[150px]">{user?.email}</span>
+                <button 
+                  onClick={() => logout()}
+                  className="text-xs font-bold text-gray-400 hover:text-white transition-colors uppercase tracking-widest"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link to="/auth" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group">
+                <User className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                <span className="text-sm font-medium">Sign In</span>
+              </Link>
+            )}
+          </div>
+
           {/* Cart Icon with animated badge */}
           <div className="relative cursor-pointer group" onClick={openCart}>
             <ShoppingCart className="w-6 h-6 text-gray-300 group-hover:text-white transition-colors" />
@@ -144,18 +168,53 @@ export default function Navbar() {
 
               <div className="flex flex-col space-y-6">
                 {NAV_LINKS.map((link, idx) => (
-                  <motion.a
-                    key={link.name}
-                    href={link.href}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + idx * 0.1 }}
-                    className="text-lg font-medium text-gray-300 hover:text-white"
+                  <React.Fragment key={link.name}>
+                    {link.href.startsWith('#') ? (
+                      <a
+                        href={link.href}
+                        className="block text-2xl font-bold text-white mb-6"
+                        onClick={() => {
+                          setIsOpen(false);
+                        }}
+                      >
+                        {link.name}
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        className="block text-2xl font-bold text-white mb-6"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {link.name}
+                      </Link>
+                    )}
+                  </React.Fragment>
+                ))}
+            
+                <div className="w-full h-px bg-zinc-800 my-6" />
+            
+                {isAuthenticated ? (
+                  <div className="space-y-4">
+                    <div className="text-gray-400 text-sm">{user?.email}</div>
+                    <button 
+                      onClick={() => {
+                        logout();
+                        setIsOpen(false);
+                      }}
+                      className="block text-xl font-bold text-red-400"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    to="/auth"
+                    className="block text-2xl font-bold text-purple-400 mb-6"
                     onClick={() => setIsOpen(false)}
                   >
-                    {link.name}
-                  </motion.a>
-                ))}
+                    Sign In
+                  </Link>
+                )}
               </div>
             </motion.div>
           </>
