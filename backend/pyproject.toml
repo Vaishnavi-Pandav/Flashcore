@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = "FastAPI E-commerce Backend"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.115.0"
+uvicorn = {extras = ["standard"], version = "^0.30.0"}
+sqlalchemy = "^2.0.35"
+asyncpg = "^0.29.0"
+alembic = "^1.13.2"
+pydantic = {extras = ["email"], version = "^2.9.2"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-dotenv = "^1.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
