@@ -6,6 +6,7 @@ import {
 import { 
   LayoutDashboard, ShoppingBag, Users, Settings, DollarSign, Package, TrendingUp 
 } from 'lucide-react';
+import ProductsTab from '../components/admin/ProductsTab';
 
 const mockSalesData = [
   { name: 'Mon', revenue: 4000 },
@@ -222,8 +223,17 @@ export default function AdminDashboard() {
           </motion.div>
         )}
 
+        {activeTab === 'products' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <ProductsTab />
+          </motion.div>
+        )}
+
         {/* Placeholder for other tabs */}
-        {activeTab !== 'overview' && (
+        {activeTab !== 'overview' && activeTab !== 'products' && (
           <div className="flex items-center justify-center h-64 text-zinc-500 border-2 border-dashed border-zinc-800 rounded-2xl">
             Content for {activeTab} is under construction
           </div>
