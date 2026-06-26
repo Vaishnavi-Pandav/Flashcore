@@ -9,7 +9,7 @@ PATCH /orders/{id}/status        → admin: update order status
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, BackgroundTasks
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -22,6 +22,7 @@ from models.review import Review
 from schemas.order import OrderResponse, ReviewCreate, ReviewResponse
 from services.auth import get_current_user
 from services.order import checkout
+from services.email import send_order_confirmation_email
 from models.user import User, UserRole
 
 router = APIRouter(prefix="/orders", tags=["orders"])
@@ -61,6 +62,7 @@ async def _get_order_for_user(
 
 @router.post("", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
 async def create_order(
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -73,7 +75,9 @@ async def create_order(
     - Atomically decrements stock and inserts Order + OrderItems.
     - Clears the Redis cart on commit.
     """
-    return await checkout(db, current_user.id)
+    order = await checkout(db, current_user.id)
+    background_tasks.add_task(send_order_confirmation_email, current_user.email, str(order.id))
+    return order
 
 
 # ── GET /orders → Order History ───────────────────────────────────────────────

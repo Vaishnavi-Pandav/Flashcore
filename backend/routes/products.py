@@ -22,6 +22,7 @@ from sqlalchemy import func, and_, asc, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
+from fastapi_cache.decorator import cache
 
 from database import get_db
 from models.product import Product
@@ -88,6 +89,7 @@ async def create_category(
 # ─── GET /products ─────────────────────────────────────────────────────────────
 
 @router.get("", response_model=PaginatedProducts)
+@cache(expire=60)
 async def list_products(
     db: AsyncSession = Depends(get_db),
     skip: int = Query(0, ge=0, description="Number of records to skip"),
@@ -141,6 +143,7 @@ async def list_products(
 # ─── GET /products/{slug} ─────────────────────────────────────────────────────
 
 @router.get("/{slug}", response_model=ProductDetailResponse)
+@cache(expire=60)
 async def get_product_by_slug(slug: str, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(Product)

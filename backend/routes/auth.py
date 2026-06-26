@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Body, Response, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Any
@@ -9,6 +9,7 @@ from database import get_db
 from models.user import User, UserRole
 from schemas.user import UserCreate, UserResponse
 from schemas.token import Token
+from main import limiter
 from services.auth import (
     get_password_hash, 
     verify_password, 
@@ -44,7 +45,8 @@ def _set_cookies(response: Response, access_token: str, refresh_token: str):
     )
 
 @router.post("/register", response_model=UserResponse)
-async def register(user_in: UserCreate, response: Response, db: AsyncSession = Depends(get_db)):
+@limiter.limit("5/minute")
+async def register(request: Request, user_in: UserCreate, response: Response, db: AsyncSession = Depends(get_db)):
     existing_user = await get_user_by_email(db, user_in.email)
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -67,7 +69,8 @@ async def register(user_in: UserCreate, response: Response, db: AsyncSession = D
     return new_user
 
 @router.post("/login", response_model=UserResponse)
-async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
+@limiter.limit("5/minute")
+async def login(request: Request, response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
     user = await get_user_by_email(db, form_data.username) # OAuth2 form uses 'username' mapped to email
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
