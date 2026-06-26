@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import FeaturedProducts from "./components/FeaturedProducts";
 import Marquee from "./components/Marquee";
 import Categories from "./components/Categories";
+import Testimonials from "./components/Testimonials";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Marquee />
       <Categories />
       <FeaturedProducts />
+      <Testimonials />
     </div>
   );
 }
