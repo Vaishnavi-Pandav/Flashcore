@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, Menu, X } from 'lucide-react';
+import { useCartStore } from '../store/cartStore';
 
 const NAV_LINKS = [
   { name: 'Products', href: '/products' },
@@ -12,9 +13,8 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  
-  // Dummy cart count for demo purposes (try modifying this to see the pop animation!)
-  const [cartCount] = useState(3);
+  const { count, openCart } = useCartStore();
+  const cartCount = count();
 
   // Scroll animations
   const { scrollY } = useScroll();
@@ -84,12 +84,12 @@ export default function Navbar() {
         {/* Cart & Mobile Toggle */}
         <div className="flex items-center space-x-6">
           {/* Cart Icon with animated badge */}
-          <div className="relative cursor-pointer group">
+          <div className="relative cursor-pointer group" onClick={openCart}>
             <ShoppingCart className="w-6 h-6 text-gray-300 group-hover:text-white transition-colors" />
             <AnimatePresence>
               {cartCount > 0 && (
                 <motion.div
-                  key={cartCount} // Triggers pop animation when value changes
+                  key={cartCount}
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}

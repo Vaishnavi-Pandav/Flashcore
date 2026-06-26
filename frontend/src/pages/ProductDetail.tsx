@@ -3,7 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Star, ChevronLeft, ChevronRight, Minus, Plus, ShoppingCart, ArrowLeft } from 'lucide-react';
-import { fetchProductBySlug, type Review } from '../lib/api';
+import { fetchProductBySlug, type Review, type ProductDetail as ProductDetailType } from '../lib/api';
+import { useCartStore } from '../store/cartStore';
 
 // ── Image Gallery ──────────────────────────────────────────────────────────
 
@@ -252,22 +253,34 @@ const ReviewsSection = ({ reviews }: { reviews: Review[] }) => {
 
 type CartState = 'idle' | 'adding' | 'added';
 
-const AddToCartButton = ({ stock }: { stock: number }) => {
+const AddToCartButton = ({ product, qty }: { product: ProductDetailType; qty: number }) => {
   const [state, setState] = useState<CartState>('idle');
+  const { addItem, openCart } = useCartStore();
 
   const handleClick = () => {
-    if (state !== 'idle' || stock === 0) return;
+    if (state !== 'idle' || product.stock === 0) return;
     setState('adding');
-    setTimeout(() => setState('added'), 1000);
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: Number(product.price),
+      image: product.images?.[0] ?? '',
+      slug: product.slug,
+      stock: product.stock,
+    });
+    setTimeout(() => {
+      setState('added');
+      openCart();
+    }, 600);
     setTimeout(() => setState('idle'), 3000);
   };
 
   return (
     <motion.button
       onClick={handleClick}
-      disabled={state !== 'idle' || stock === 0}
+      disabled={state !== 'idle' || product.stock === 0}
       className={`relative h-14 rounded-2xl font-bold text-base overflow-hidden flex items-center justify-center gap-3 px-8 w-full sm:w-auto sm:min-w-[220px] transition-colors ${
-        stock === 0 ? 'bg-zinc-800 text-gray-500 cursor-not-allowed' :
+        product.stock === 0 ? 'bg-zinc-800 text-gray-500 cursor-not-allowed' :
         state === 'added' ? 'bg-emerald-600 text-white' :
         'bg-purple-600 hover:bg-purple-500 text-white'
       }`}
@@ -278,7 +291,7 @@ const AddToCartButton = ({ stock }: { stock: number }) => {
           <motion.span key="idle" className="flex items-center gap-2"
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
             <ShoppingCart className="w-5 h-5" />
-            {stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+            {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
           </motion.span>
         )}
         {state === 'adding' && (
@@ -393,7 +406,7 @@ export default function ProductDetail() {
             {/* Qty + Add to Cart */}
             <div className="flex flex-wrap items-center gap-4 mb-10">
               <QuantitySelector qty={qty} setQty={setQty} max={product.stock} />
-              <AddToCartButton stock={product.stock} />
+              <AddToCartButton product={product} qty={qty} />
             </div>
 
             {/* Meta */}

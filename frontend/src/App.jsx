@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import CartDrawer from "./components/CartDrawer";
 
 // Landing page sections
 import Hero from "./components/Hero";
@@ -30,6 +31,7 @@ function App() {
   return (
     <div className="min-h-screen bg-black font-sans">
       <Navbar />
+      <CartDrawer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
