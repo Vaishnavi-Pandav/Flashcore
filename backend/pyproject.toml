@@ -18,6 +18,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-dotenv = "^1.0.1"
 cloudinary = "^1.41.0"
 redis = {extras = ["hiredis"], version = "^5.0.0"}
+stripe = "^11.1.0"
 
 [build-system]
 requires = ["poetry-core"]

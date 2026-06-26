@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from routes.auth import router as auth_router
 from routes.products import router as products_router
 from routes.orders import orders_router, cart_router, reviews_router
+from routes.payments import router as payments_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -33,6 +34,7 @@ app.include_router(products_router)
 app.include_router(orders_router)
 app.include_router(cart_router)
 app.include_router(reviews_router)
+app.include_router(payments_router)
 
 @app.get("/")
 async def read_root():

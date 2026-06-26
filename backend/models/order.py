@@ -18,6 +18,7 @@ class Order(Base, UUIDMixin, TimestampMixin):
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
     status: Mapped[OrderStatus] = mapped_column(SQLEnum(OrderStatus), default=OrderStatus.PENDING, index=True, nullable=False)
     total: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+    payment_intent_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
 
     # Relationships
     user: Mapped["User"] = relationship("User", back_populates="orders")
