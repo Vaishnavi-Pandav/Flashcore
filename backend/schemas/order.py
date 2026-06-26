@@ -2,7 +2,15 @@ import uuid
 from decimal import Decimal
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
-from .product import ProductResponse
+
+
+class ReviewResponse(BaseModel):
+    id: uuid.UUID
+    user_id: uuid.UUID
+    product_id: uuid.UUID
+    rating: int
+    body: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
 
 
 class OrderItemBase(BaseModel):
@@ -12,9 +20,7 @@ class OrderItemBase(BaseModel):
 
 class OrderItemResponse(OrderItemBase):
     id: uuid.UUID
-    product: ProductResponse
     model_config = ConfigDict(from_attributes=True)
-
 
 class OrderCreate(BaseModel):
     items: list[OrderItemBase]
@@ -44,9 +50,3 @@ class CartResponse(BaseModel):
 class ReviewCreate(BaseModel):
     rating: int
     body: Optional[str] = None
-
-class ReviewResponse(ReviewCreate):
-    id: uuid.UUID
-    user_id: uuid.UUID
-    product_id: uuid.UUID
-    model_config = ConfigDict(from_attributes=True)

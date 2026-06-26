@@ -2,6 +2,7 @@ import uuid
 from decimal import Decimal
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
+from schemas.order import ReviewResponse
 
 
 class CategoryBase(BaseModel):
@@ -40,5 +41,18 @@ class ProductUpdate(BaseModel):
 
 class ProductResponse(ProductBase):
     id: uuid.UUID
+    is_deleted: bool
     category: CategoryResponse
     model_config = ConfigDict(from_attributes=True)
+
+class ProductDetailResponse(ProductResponse):
+    """Extended response with embedded reviews for single-product endpoint."""
+    reviews: list[ReviewResponse] = []
+    model_config = ConfigDict(from_attributes=True)
+
+
+class PaginatedProducts(BaseModel):
+    total: int
+    skip: int
+    limit: int
+    items: list[ProductResponse]
