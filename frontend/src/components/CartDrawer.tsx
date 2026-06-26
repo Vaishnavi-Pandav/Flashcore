@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence, useAnimate, stagger } from 'framer-motion';
 import { X, Minus, Plus, ShoppingBag, ArrowRight, Trash2 } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
+import { useNavigate } from 'react-router-dom';
 
 // ── Animated Number Counter ────────────────────────────────────────────────
 
@@ -123,12 +124,17 @@ const CartItemRow = ({
 
 const CheckoutButton = () => {
   const [state, setState] = useState<'idle' | 'loading'>('idle');
+  const navigate = useNavigate();
+  const { closeCart } = useCartStore();
 
   const handleClick = () => {
     if (state !== 'idle') return;
     setState('loading');
-    // Simulate redirect delay
-    setTimeout(() => setState('idle'), 3000);
+    setTimeout(() => {
+      setState('idle');
+      closeCart();
+      navigate('/checkout');
+    }, 1000);
   };
 
   return (

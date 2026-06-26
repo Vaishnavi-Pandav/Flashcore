@@ -13,6 +13,7 @@ import CtaSection from "./components/CtaSection";
 // Pages
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
+import Checkout from "./pages/Checkout";
 
 // ── Home Sections ────────────────────────────────────────────────────────────
 const Home = () => (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:slug" element={<ProductDetail />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </div>
   );
