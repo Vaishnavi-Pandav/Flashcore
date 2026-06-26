@@ -91,7 +91,9 @@ export default function Navbar() {
           <div className="hidden md:flex items-center">
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <span className="text-gray-300 text-sm truncate max-w-[150px]">{user?.email}</span>
+                <Link to="/dashboard" className="text-gray-300 hover:text-white text-sm truncate max-w-[150px] transition-colors">
+                  {user?.email}
+                </Link>
                 <button 
                   onClick={() => logout()}
                   className="text-xs font-bold text-gray-400 hover:text-white transition-colors uppercase tracking-widest"
@@ -195,7 +197,9 @@ export default function Navbar() {
             
                 {isAuthenticated ? (
                   <div className="space-y-4">
-                    <div className="text-gray-400 text-sm">{user?.email}</div>
+                    <Link to="/dashboard" onClick={() => setIsOpen(false)} className="block text-gray-400 hover:text-white text-sm transition-colors">
+                      {user?.email} (Dashboard)
+                    </Link>
                     <button 
                       onClick={() => {
                         logout();

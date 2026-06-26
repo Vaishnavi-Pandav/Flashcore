@@ -15,6 +15,7 @@ import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
 
 // ── Home Sections ────────────────────────────────────────────────────────────
 const Home = () => (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/products/:slug" element={<ProductDetail />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );
