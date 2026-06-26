@@ -1,57 +1,61 @@
+import React, { lazy, Suspense, memo, useCallback } from "react";
 import { Routes, Route } from "react-router-dom";
+import { LazyMotion, domAnimation } from "framer-motion";
 import Navbar from "./components/Navbar";
 import CartDrawer from "./components/CartDrawer";
-
-// Landing page sections
-import Hero from "./components/Hero";
-import Marquee from "./components/Marquee";
-import Categories from "./components/Categories";
-import FeaturedProducts from "./components/FeaturedProducts";
-import Testimonials from "./components/Testimonials";
-import CtaSection from "./components/CtaSection";
-
-// Pages
-import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import Checkout from "./pages/Checkout";
-import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 
-// ── Home Sections ────────────────────────────────────────────────────────────
-const Home = () => (
-  <div>
-    <Hero />
-    <Marquee />
-    <Categories />
-    <FeaturedProducts />
-    <Testimonials />
-    <CtaSection />
+// ── Lazy-loaded route pages ──────────────────────────────────────────────────
+// Each page becomes a separate JS chunk that is only fetched when navigated to.
+const Home          = lazy(() => import("./pages/Home"));
+const Products      = lazy(() => import("./pages/Products"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const Checkout      = lazy(() => import("./pages/Checkout"));
+const Auth          = lazy(() => import("./pages/Auth"));
+const Dashboard     = lazy(() => import("./pages/Dashboard"));
+const AdminDashboard= lazy(() => import("./pages/AdminDashboard"));
+
+// ── Full-screen loading fallback ─────────────────────────────────────────────
+const PageLoader = memo(() => (
+  <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-10 h-10 rounded-full border-2 border-zinc-700 border-t-purple-500 animate-spin" />
+      <p className="text-zinc-500 text-sm font-medium">Loading...</p>
+    </div>
   </div>
-);
+));
 
 // ── App ──────────────────────────────────────────────────────────────────────
+// LazyMotion with domAnimation loads only the essential Framer Motion features
+// (~14 kb) instead of the full bundle (~50 kb). All `motion.*` components in
+// child trees must use the m.* equivalents or import from `framer-motion/m`.
 function App() {
   return (
-    <div className="min-h-screen bg-black font-sans">
-      <Navbar />
-      <CartDrawer />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:slug" element={<ProductDetail />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin" element={
-          <AdminRoute>
-            <AdminDashboard />
-          </AdminRoute>
-        } />
-      </Routes>
-    </div>
+    <LazyMotion features={domAnimation} strict>
+      <div className="min-h-screen bg-black font-sans">
+        <Navbar />
+        <CartDrawer />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/"                  element={<Home />} />
+            <Route path="/products"          element={<Products />} />
+            <Route path="/products/:slug"    element={<ProductDetail />} />
+            <Route path="/checkout"          element={<Checkout />} />
+            <Route path="/auth"              element={<Auth />} />
+            <Route path="/dashboard"         element={<Dashboard />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+          </Routes>
+        </Suspense>
+      </div>
+    </LazyMotion>
   );
 }
 
-export default App;
+export default memo(App);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Github, Chrome, Zap } from 'lucide-react';
+import { Mail, Lock, ArrowRight, GitBranch, Globe, Zap } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -176,7 +176,7 @@ export default function Auth() {
                   type="button"
                   className="flex items-center justify-center gap-2 bg-zinc-950 border border-zinc-800 hover:bg-zinc-800 text-white py-3 rounded-xl transition-colors"
                 >
-                  <Chrome className="w-5 h-5" /> Google
+                  <Globe className="w-5 h-5" /> Google
                 </motion.button>
                 <motion.button 
                   whileHover={{ y: -2 }}
@@ -184,7 +184,7 @@ export default function Auth() {
                   type="button"
                   className="flex items-center justify-center gap-2 bg-zinc-950 border border-zinc-800 hover:bg-zinc-800 text-white py-3 rounded-xl transition-colors"
                 >
-                  <Github className="w-5 h-5" /> GitHub
+                  <GitBranch className="w-5 h-5" /> GitHub
                 </motion.button>
               </div>
             </motion.div>
